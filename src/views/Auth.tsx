@@ -17,7 +17,6 @@ export const Auth = () => {
     };
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
-        console.log(login, password);
         try {
             await client.post("/api/login", {
                 body: JSON.stringify({ login, password }),

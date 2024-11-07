@@ -37,7 +37,7 @@ client.interceptors.response.use(
                 return Promise.reject(error);
             }
         } else {
-            console.log("dupa");
+            console.log(error);
         }
         return Promise.reject(error);
     }

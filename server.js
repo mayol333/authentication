@@ -47,9 +47,8 @@ app.post("/api/login", (req, res) => {
 
 app.get("/api/refresh", (req, res) => {
     const { refreshToken } = req.cookies;
-    console.log(refreshToken);
     if (!refreshToken) {
-        return res.sendStatus(401);
+        return res.sendStatus(403);
     }
     jwt.verify(refreshToken, "secretKey", (error) => {
         if (error) {
