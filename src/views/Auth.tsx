@@ -1,6 +1,9 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import client from "../http/client";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Auth = () => {
+    const navigate = useNavigate();
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
@@ -12,13 +15,17 @@ export const Auth = () => {
     ) => {
         setPassword(event.currentTarget.value);
     };
-    const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
         console.log(login, password);
-        fetch("http://localhost:3000/login", {
-            method: "POST",
-            body: JSON.stringify({ login, password }),
-        });
+        try {
+            await client.post("/api/login", {
+                body: JSON.stringify({ login, password }),
+            });
+            navigate({ to: "/protected", replace: true });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

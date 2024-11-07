@@ -11,9 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ProtectedImport } from './routes/protected'
 import { Route as AuthImport } from './routes/auth'
 
 // Create/Update Routes
+
+const ProtectedRoute = ProtectedImport.update({
+  id: '/protected',
+  path: '/protected',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthRoute = AuthImport.update({
   id: '/auth',
@@ -32,6 +39,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/protected': {
+      id: '/protected'
+      path: '/protected'
+      fullPath: '/protected'
+      preLoaderRoute: typeof ProtectedImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +53,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
+  '/protected': typeof ProtectedRoute
 }
 
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/protected': typeof ProtectedRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/auth': typeof AuthRoute
+  '/protected': typeof ProtectedRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/auth'
+  fullPaths: '/auth' | '/protected'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth'
-  id: '__root__' | '/auth'
+  to: '/auth' | '/protected'
+  id: '__root__' | '/auth' | '/protected'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
+  ProtectedRoute: typeof ProtectedRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
+  ProtectedRoute: ProtectedRoute,
 }
 
 export const routeTree = rootRoute
@@ -79,11 +98,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/auth"
+        "/auth",
+        "/protected"
       ]
     },
     "/auth": {
       "filePath": "auth.tsx"
+    },
+    "/protected": {
+      "filePath": "protected.tsx"
     }
   }
 }
